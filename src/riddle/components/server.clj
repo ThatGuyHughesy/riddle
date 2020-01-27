@@ -1,5 +1,5 @@
 (ns riddle.components.server
-  (:require [clojure.tools.logging :refer [info error]]
+  (:require [clojure.tools.logging :refer [info]]
             [ring.adapter.jetty :as jetty]
             [com.stuartsierra.component :as component]
             [riddle.components.routes :as routes]))

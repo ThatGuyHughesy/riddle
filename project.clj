@@ -12,7 +12,9 @@
                  [aero "1.1.3"]
                  [clj-http "3.10.0"]
                  [compojure "1.6.1"]
-                 [ring/ring-jetty-adapter "1.8.0"]]
+                 [ring/ring-jetty-adapter "1.8.0"]
+                 [clj-http-fake "1.0.3"]
+                 [ring/ring-mock "0.4.0"]]
   :repl-options {:init-ns riddle.core}
   :profiles {:test {:dependencies [[clj-http-fake "1.0.3"]
                                    [ring/ring-mock "0.4.0"]]}})

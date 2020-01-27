@@ -1,4 +1,7 @@
 {:server {:host "localhost"
           :port 8080
           :daemon? true
-          :join? false}}
+          :join? false}
+ :client {:url "http://localhost:5000"
+          :connection-manager {:threads 1
+                               :timeout 60}}}

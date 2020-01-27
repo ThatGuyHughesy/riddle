@@ -1,29 +1,31 @@
 (ns riddle.components.routes
-  (:require [compojure.core :refer [routes make-route GET PUT POST DELETE OPTIONS ANY]]))
+  (:require [compojure.core :refer [routes make-route GET PUT POST DELETE OPTIONS ANY]]
+            [clj-http.client :as client]
+            [riddle.http :as http]))
 
 (defmulti handler
   (fn [request & _]
     (:request-method request)))
 
 (defmethod handler :get
-  [request component]
-  "GET")
+  [request {:keys [client]}]
+  (http/forward-request client request {} client/get))
 
 (defmethod handler :post
-  [request component]
-  "POST")
+  [request {:keys [client]}]
+  (http/forward-request client request {:body (:body request)} client/post))
 
 (defmethod handler :put
-  [request component]
-  "PUT")
+  [request {:keys [client]}]
+  (http/forward-request client request {:body (:body request)} client/put))
 
 (defmethod handler :options
-  [request component]
-  "OPTIONS")
+  [request {:keys [client]}]
+  (http/forward-request client request {} client/options))
 
 (defmethod handler :delete
-  [request component]
-  "DELETE")
+  [request {:keys [client]}]
+  (http/forward-request client request {} client/delete))
 
 (defn build-routes [component]
   (routes
