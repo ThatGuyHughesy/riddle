@@ -4,6 +4,20 @@ A Clojure library designed to proxy and filter HTTP requests.
 
 ## Development
 
+### Local
+
+Start repl
+
+```sh
+$ lein repl
+```
+
+Start system
+
+```sh
+riddle.core=> (-main "resources/config.edn")
+```
+
 ### Testing
 
 Run tests

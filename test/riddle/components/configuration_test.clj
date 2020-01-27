@@ -6,13 +6,19 @@
   {:server {:host "localhost"
             :port 8080
             :daemon? true
-            :join? false}})
+            :join? false}
+   :client {:url "http://localhost:9200"
+            :connection-manager {:threads 1
+                                 :timeout 60}}})
 
 (def invalid-configuration
   {:server {:host "localhost"
             :port 8080
             :daemon? true
-            :join? "false"}})
+            :join? "false"}
+   :client {:url "http://localhost:9200"
+            :connection-manager {:threads "1"
+                                 :timeout 60}}})
 
 (deftest test-valid-configuration
   (is (true? (valid? valid-configuration))))
