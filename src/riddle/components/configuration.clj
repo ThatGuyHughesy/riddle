@@ -6,18 +6,25 @@
             [com.stuartsierra.component :as component]))
 
 (s/def ::host string?)
-(s/def ::port int?)
+(s/def ::port number?)
 (s/def ::daemon? boolean?)
 (s/def ::join? boolean?)
 (s/def ::server (s/keys :req-un [::host ::port ::daemon? ::join?]))
 
-(s/def ::url string?)
-(s/def ::threads int?)
-(s/def ::timeout int?)
-(s/def ::connection-manager (s/keys :req-un [::threads ::timeout]))
-(s/def ::client (s/keys :req-un [::url ::connection-manager]))
+(s/def ::threads number?)
+(s/def ::timeout number?)
+(s/def ::client (s/keys :opt-un [::threads ::timeout]))
 
-(s/def ::configuration (s/keys :req-un [::server ::client]))
+(s/def ::path (s/coll-of keyword?))
+(s/def ::value (s/or :value keyword? :value string? :value number? :value boolean?))
+(s/def :when/type #{:equals :greater-than :less-than})
+(s/def ::when (s/keys :req-un [:when/type ::path ::value]))
+(s/def :then/type #{:replace :increment :decrement})
+(s/def ::then (s/keys :req-un [:then/type ::path ::value]))
+(s/def ::rule (s/keys :req-un [::when ::then]))
+(s/def ::rules (s/* ::rule))
+
+(s/def ::configuration (s/keys :req-un [::server ::client ::rules]))
 
 (defn valid? [configuration]
   (->> (s/conform ::configuration configuration)

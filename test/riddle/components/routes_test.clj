@@ -4,7 +4,9 @@
             [ring.mock.request :as mock]
             [clj-http.fake :as fake]))
 
-(def dummy-response {:status 200 :headers {} :body "Riddle is the best!"})
+(def dummy-response {:status 200
+                     :headers {}
+                     :body "Riddle is the best!"})
 
 (deftest test-handler
   (fake/with-fake-routes
@@ -12,12 +14,9 @@
      (fn [_] dummy-response)}
     (->> (map
            (fn [request-type]
-             (dissoc
-               (handler
-                 (mock/request request-type "/test")
-                 {:client
-                  {:url "http://localhost:5000"
-                   :connection-manager nil}})
-               :request-time 4 :orig-content-encoding))
+             (-> (mock/request request-type "test")
+                 (assoc :uri "http://localhost:5000/test")
+                 (handler {:client {:connection-manager nil}})
+                 (dissoc :request-time :orig-content-encoding)))
            [:get :post :put :options :delete])
          (every? #(= % dummy-response)))))

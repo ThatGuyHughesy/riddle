@@ -8,11 +8,9 @@
 
   (start [this]
     (let [configuration (-> this :configuration :configuration :client)
-          connection-manager (conn-mgr/make-reusable-conn-manager (:client configuration))]
-      (info "Starting client for" (:url configuration))
-      (-> this
-          (assoc :url (:url configuration))
-          (assoc :connection-manager connection-manager))))
+          connection-manager (conn-mgr/make-reusable-conn-manager configuration)]
+      (info "Starting client")
+      (assoc this :connection-manager connection-manager)))
 
   (stop [this]
     (when-let [connection-manager (:connection-manager client)]
