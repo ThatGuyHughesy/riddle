@@ -2,6 +2,11 @@
           :port 8080
           :daemon? true
           :join? false}
- :client {:url "http://localhost:5000"
-          :connection-manager {:threads 1
-                               :timeout 60}}}
+ :client {:threads 1
+          :timeout 60}
+ :rules [{:when {:type :equals
+                 :path [:request-method]
+                 :value :get}
+          :then {:type :replace
+                 :path [:uri]
+                 :value "http://localhost:5000/status"}}]}

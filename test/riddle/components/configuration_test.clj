@@ -7,21 +7,23 @@
             :port 8080
             :daemon? true
             :join? false}
-   :client {:url "http://localhost:9200"
-            :connection-manager {:threads 1
-                                 :timeout 60}}})
-
-(def invalid-configuration
-  {:server {:host "localhost"
-            :port 8080
-            :daemon? true
-            :join? "false"}
-   :client {:url "http://localhost:9200"
-            :connection-manager {:threads "1"
-                                 :timeout 60}}})
+   :client {:threads 1
+            :timeout 60}
+   :rules [{:when {:type :equals
+                   :path [:request-method]
+                   :value :get}
+            :then {:type :replace
+                   :path [:uri]
+                   :value "http://localhost:5000/status"}}]})
 
 (deftest test-valid-configuration
   (is (true? (valid? valid-configuration))))
 
-(deftest test-invalid-configuration
-  (is (false? (valid? invalid-configuration))))
+(deftest test-invalid-configuration-server
+  (is (false? (valid? (assoc-in valid-configuration [:server :port] "8080")))))
+
+(deftest test-invalid-configuration-client
+  (is (false? (valid? (assoc-in valid-configuration [:client :threads] "1")))))
+
+(deftest test-invalid-configuration-rules
+  (is (false? (valid? (assoc-in valid-configuration [:rules 0 :when :type] "equals")))))

@@ -1,6 +1,8 @@
 # riddle
 
-A Clojure library designed to proxy and filter HTTP requests.
+Rule based HTTP request proxy and filter written in Clojure.
+
+[![Build Status](https://travis-ci.org/ThatGuyHughesy/riddle.svg?branch=master)](https://travis-ci.org/ThatGuyHughesy/riddle)
 
 ## Development
 
