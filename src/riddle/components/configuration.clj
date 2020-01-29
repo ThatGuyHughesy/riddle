@@ -19,8 +19,8 @@
 (s/def ::value (s/or :value keyword? :value string? :value number? :value boolean?))
 (s/def :when/type #{:equals :greater-than :less-than})
 (s/def ::when (s/keys :req-un [:when/type ::path ::value]))
-(s/def :then/type #{:replace :increment :decrement})
-(s/def ::then (s/keys :req-un [:then/type ::path ::value]))
+(s/def :then/type #{:replace :increment :decrement :allow :deny})
+(s/def ::then (s/keys :req-un [:then/type] :opt-un [::path ::value]))
 (s/def ::rule (s/keys :req-un [::when ::then]))
 (s/def ::rules (s/* ::rule))
 

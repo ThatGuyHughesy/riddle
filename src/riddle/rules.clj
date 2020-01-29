@@ -39,13 +39,11 @@
                               resolved-path))))
 
 (defn process [rules request]
-  (reduce
-    (fn [request rule]
-      (try
-        (if (rule-when (:when rule) request)
-          (rule-then (:then rule) request)
-          request)
-        (catch Exception e
-          (error "Error applying rule: " rule "\n" e))))
-    request
-    rules))
+  (if-let [rule (first rules)]
+    (if (rule-when (:when rule) request)
+      (let [then-type (get-in rule [:then :type])]
+        (cond (= :allow then-type) request
+              (= :deny then-type) nil
+              :default (recur (rest rules) (rule-then (:then rule) request))))
+      request)
+    request))
