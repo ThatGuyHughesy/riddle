@@ -1,4 +1,4 @@
-(ns riddle.components.configuration-test
+(ns riddle.unit.configuration
   (:require [clojure.test :refer :all]
             [riddle.components.configuration :refer :all]))
 

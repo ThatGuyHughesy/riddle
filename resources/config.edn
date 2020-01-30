@@ -5,8 +5,12 @@
  :client {:threads 1
           :timeout 60}
  :rules [{:when {:type :equals
-                 :path [:request-method]
-                 :value :get}
+                 :path [:uri]
+                 :value "http://localhost:8080"}
           :then {:type :replace
                  :path [:uri]
-                 :value "http://localhost:5000/status"}}]}
+                 :value "http://localhost:5000"}}
+         {:when {:type :equals
+                 :path [:request-method]
+                 :value :delete}
+          :then {:type :deny}}]}

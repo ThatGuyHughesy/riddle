@@ -1,6 +1,6 @@
 (defproject riddle "0.1.0-SNAPSHOT"
   :author "Conor Hughes <hello@conorhughes.me>"
-  :description "HTTP filter"
+  :description "Rule based HTTP request proxy and filter written in Clojure"
   :url "https://thatguyhughesy.github.io/riddle"
   :license {:name "MIT"
             :url "https://choosealicense.com/licenses/mit/"
