@@ -2,16 +2,14 @@
   (:require [com.stuartsierra.component :as component]
             [clojure.tools.logging :refer [info error]]
             [riddle.components.configuration :as configuration]
-            [riddle.components.server :as server]
-            [riddle.components.client :as client]))
+            [riddle.components.server :as server]))
 
 (def system nil)
 
 (defn riddle-system [filename]
   (component/system-map
     :configuration (configuration/map->Configuration {:filename filename})
-    :client (component/using (client/map->Client {}) [:configuration])
-    :server (component/using (server/map->Server {}) [:configuration :client])))
+    :server (component/using (server/map->Server {}) [:configuration])))
 
 (defn init [filename]
   (alter-var-root

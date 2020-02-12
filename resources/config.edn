@@ -1,16 +1,6 @@
 {:server {:host "localhost"
-          :port 8080
-          :daemon? true
-          :join? false}
- :client {:threads 1
-          :timeout 60}
- :rules [{:when {:type :equals
-                 :path [:uri]
-                 :value "http://localhost:8080"}
-          :then {:type :replace
-                 :path [:uri]
-                 :value "http://localhost:5000"}}
-         {:when {:type :equals
+          :port 8080}
+ :rules [{:when {:type :equal?
                  :path [:request-method]
                  :value :delete}
           :then {:type :deny}}]}
