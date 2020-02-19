@@ -9,45 +9,74 @@
                     :server-port 80})
 
 (deftest when-test
-  ":equals matches"
+  ":equal? matches"
   (is true? (rule-when
-              {:type :equals :path [:request-method] :value :post}
+              {:type :equal? :path [:request-method] :value :post}
               dummy-request))
-  ":equals does matches"
+  ":equal? does not match"
   (is true? (rule-when
-              {:type :equals :path [:request-method] :value :get}
+              {:type :equal? :path [:request-method] :value :get}
               dummy-request))
-  ":greater-than matches"
+  ":not-equal? matches"
   (is true? (rule-when
-              {:type :greater-than :path [:server-port] :value 79}
+              {:type :not-equal? :path [:request-method] :value :get}
               dummy-request))
-  ":greater-than does not matches"
+  ":not-equal? does not match"
+  (is true? (rule-when
+              {:type :not-equal? :path [:request-method] :value :post}
+              dummy-request))
+  ":greater-than? matches"
+  (is true? (rule-when
+              {:type :greater-than? :path [:server-port] :value 79}
+              dummy-request))
+  ":greater-than? does not match"
   (is false? (rule-when
-              {:type :greater-than :path [:server-port] :value 81}
-              dummy-request))
-  ":greater-than invalid"
+               {:type :greater-than? :path [:server-port] :value 81}
+               dummy-request))
+  ":greater-than? invalid"
   (is true? (rule-when
-              {:type :greater-than :path [:server-port] :value "eighty-one"}
+              {:type :greater-than? :path [:server-port] :value "eighty-one"}
               dummy-request))
-  ":less-than matches"
+  ":less-than? matches"
   (is true? (rule-when
-              {:type :less-than :path [:server-port] :value 81}
+              {:type :less-than? :path [:server-port] :value 81}
               dummy-request))
-  ":less-than does not matches"
+  ":less-than? does not match"
   (is false? (rule-when
-              {:type :less-than :path [:server-port] :value 79}
-              dummy-request))
-  ":less-than invalid"
+               {:type :less-than? :path [:server-port] :value 79}
+               dummy-request))
+  ":less-than? invalid"
   (is true? (rule-when
-              {:type :less-than :path [:server-port] :value "seventy-nine"}
+              {:type :less-than? :path [:server-port] :value "seventy-nine"}
+              dummy-request))
+  ":exist? matches"
+  (is true? (rule-when
+              {:type :exist? :path [:server-port]}
+              dummy-request))
+  ":exist? does not match"
+  (is true? (rule-when
+              {:type :exist? :path [:hostname]}
+              dummy-request))
+  ":not-exist? matches"
+  (is true? (rule-when
+              {:type :not-exist? :path [:hostname]}
+              dummy-request))
+  ":not-exist? does not match"
+  (is true? (rule-when
+              {:type :not-exist? :path [:server-port]}
               dummy-request)))
 
 (deftest then-test
-  ":replace"
+  ":insert"
   (is (= :get (:request-method
                 (rule-then
-                  {:type :replace :path [:request-method] :value :get}
+                  {:type :insert :path [:request-method] :value :get}
                   dummy-request))))
+  ":remove"
+  (is (nil? (:request-method
+              (rule-then
+                {:type :remove :path [:request-method]}
+                dummy-request))))
   ":increment"
   (is (= 81 (:server-port
               (rule-then
@@ -71,15 +100,15 @@
 
 (deftest process-test
   ":allow"
-  (is (= dummy-request
-         (process [{:when {:type :equals :path [:request-method] :value :post}
+  (is (= (assoc dummy-request :action :allow)
+         (process [{:when {:type :equal? :path [:request-method] :value :post}
                     :then {:type :allow}}
-                   {:when {:type :equals :path [:request-method] :value :post}
-                    :then {:type :replace :path [:request-method] :value :get}}]
+                   {:when {:type :equal? :path [:request-method] :value :post}
+                    :then {:type :insert :path [:request-method] :value :get}}]
                   dummy-request)))
   ":deny"
-  (is nil? (process [{:when {:type :equals :path [:request-method] :value :post}
-                      :then {:type :replace :path [:request-method] :value :get}}
-                     {:when {:type :equals :path [:request-method] :value :get}
-                      :then {:type :deny}}]
-                    dummy-request)))
+  (is :deny (process [{:when {:type :equal? :path [:request-method] :value :post}
+                       :then {:type :insert :path [:request-method] :value :get}}
+                      {:when {:type :equal? :path [:request-method] :value :get}
+                       :then {:type :deny}}]
+                     dummy-request)))

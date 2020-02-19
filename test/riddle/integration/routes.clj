@@ -6,7 +6,8 @@
 
 (def dummy-response {:status 200
                      :headers {}
-                     :body "Riddle is the best!"})
+                     :body "Riddle is the best!"
+                     :random :field})
 
 (deftest test-handler
   (fake/with-fake-routes
@@ -16,13 +17,16 @@
            (fn [request-type]
              (-> (mock/request request-type "/")
                  (assoc :uri "http://localhost:8080")
-                 (handler {:connection-manager nil}
-                          [{:when {:type :equals
-                                   :path [:uri]
-                                   :value "http://localhost:8080"}
-                            :then {:type :replace
-                                   :path [:uri]
-                                   :value "http://localhost:5000/api"}}])
+                 (handle-request [{:when {:type :equal?
+                                          :path [:uri]
+                                          :value "http://localhost:8080"}
+                                   :then {:type :insert
+                                          :path [:uri]
+                                          :value "http://localhost:5000/api"}}
+                                  {:when {:type :exist?
+                                          :path [:random]}
+                                   :then {:type :remove
+                                          :path [:random]}}])
                  (dissoc :request-time :orig-content-encoding)))
            [:get :post :put :options :delete])
          (every? #(= % dummy-response)))))

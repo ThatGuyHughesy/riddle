@@ -7,24 +7,18 @@
 
 (s/def ::host string?)
 (s/def ::port number?)
-(s/def ::daemon? boolean?)
-(s/def ::join? boolean?)
-(s/def ::server (s/keys :req-un [::host ::port ::daemon? ::join?]))
-
-(s/def ::threads number?)
-(s/def ::timeout number?)
-(s/def ::client (s/keys :opt-un [::threads ::timeout]))
+(s/def ::server (s/keys :req-un [::host ::port]))
 
 (s/def ::path (s/coll-of keyword?))
 (s/def ::value (s/or :value keyword? :value string? :value number? :value boolean?))
-(s/def :when/type #{:equals :greater-than :less-than})
+(s/def :when/type #{:equal? :not-equal? :greater-than? :less-than? :exist? :not-exist?})
 (s/def ::when (s/keys :req-un [:when/type ::path ::value]))
-(s/def :then/type #{:replace :increment :decrement :allow :deny})
+(s/def :then/type #{:insert :remove :increment :decrement :allow :deny})
 (s/def ::then (s/keys :req-un [:then/type] :opt-un [::path ::value]))
 (s/def ::rule (s/keys :req-un [::when ::then]))
 (s/def ::rules (s/* ::rule))
 
-(s/def ::configuration (s/keys :req-un [::server ::client ::rules]))
+(s/def ::configuration (s/keys :req-un [::server ::rules]))
 
 (defn valid? [configuration]
   (->> (s/conform ::configuration configuration)

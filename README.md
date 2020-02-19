@@ -28,6 +28,28 @@ Run tests
 $ lein test
 ```
 
+## Deployment
+
+### Building
+
+```sh
+$ lein uberjar
+```
+
+### Running
+
+```sh
+$ java -jar riddle.jar config.edn
+```
+
+## Configuration
+
+Checkout how to configure Riddle [here](https://github.com/ThatGuyHughesy/riddle/blob/master/doc/configuration.md).
+
+## Performance
+
+Checkout Riddle's performance [here](https://github.com/ThatGuyHughesy/riddle/blob/master/doc/performance.md).
+
 ## Contributing
 
 Want to become a Riddle [contributor](https://github.com/ThatGuyHughesy/riddle/blob/master/CONTRIBUTORS.md)?  
