@@ -39,7 +39,13 @@ $ lein uberjar
 ### Running
 
 ```sh
-$ java -jar riddle.jar config.edn
+$ java -jar riddle.jar <PATH_TO_CONFIG>
+```
+
+Example:
+
+```sh
+$ java -jar riddle.jar /etc/riddle/config.edn
 ```
 
 ## Configuration

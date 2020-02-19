@@ -11,7 +11,7 @@ Configuration used:
 ```clojure
 {:server {:host "localhost"
           :port 8080}
- :rules [{:when {:type :equals
+ :rules [{:when {:type :equal?
                  :path [:request-method]
                  :value :delete}
           :then {:type :deny}}]}
@@ -23,18 +23,20 @@ Configuration used:
 
 #### Throughput
 
-290,376/minute
+335,752/minute
 
 #### Latency
 
-162ms
+Average: 131ms
+Median: 34ms
 
 ### With core.async
 
 #### Throughput
 
-595,787/minute
+614,049/minute
 
 #### Latency
 
-82ms
+Average: 76ms
+Median: 31ms
